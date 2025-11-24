@@ -1,423 +1,315 @@
-# 豆包 Free API - 增强版
+# Doubao AI Free 服务
 
-[![](https://img.shields.io/github/license/1994qrq/2025doubao-free-api.svg)](LICENSE)
-![](https://img.shields.io/github/stars/1994qrq/2025doubao-free-api.svg)
-![](https://img.shields.io/github/forks/1994qrq/2025doubao-free-api.svg)
+[![](https://img.shields.io/github/license/llm-red-team/doubao-free-api.svg)](LICENSE)
+![](https://img.shields.io/github/stars/llm-red-team/doubao-free-api.svg)
+![](https://img.shields.io/github/forks/llm-red-team/doubao-free-api.svg)
+![](https://img.shields.io/docker/pulls/vinlic/doubao-free-api.svg)
 
----
+支持高速流式输出、支持多轮对话、支持联网搜索、支持智能体对话（计划支持）、支持AI绘图（计划支持）、支持长文档解读（计划支持）、支持图像解析（计划支持），零配置部署，多路token支持，自动清理会话痕迹。
 
-## 🎁 推荐服务器
+与OpenAI接口完全兼容。
 
-**部署本项目推荐使用阿里云服务器**
+还有以下十个free-api欢迎关注：
 
-🔥 **限时优惠**：200M 带宽 + 不限速 + 不限流量，仅需 **79元/年**！
+Moonshot AI（Kimi.ai）接口转API [kimi-free-api](https://github.com/LLM-Red-Team/kimi-free-api)
 
-👉 [**点击购买阿里云服务器（专属优惠链接）**](https://www.aliyun.com/minisite/goods?userCode=d3mvo2j1)
+阶跃星辰 (跃问StepChat) 接口转API [step-free-api](https://github.com/LLM-Red-Team/step-free-api)
 
-- ✅ 200M 超大带宽
-- ✅ 不限速、不限流量
-- ✅ 稳定可靠，适合部署各类应用
-- ✅ 新用户专享优惠价
+阿里通义 (Qwen) 接口转API [qwen-free-api](https://github.com/LLM-Red-Team/qwen-free-api)
 
----
+智谱AI (智谱清言) 接口转API [glm-free-api](https://github.com/LLM-Red-Team/glm-free-api)
 
-🚀 **增强版特性**：在原版基础上修复问题并新增**图文对话**功能！
+秘塔AI (Metaso) 接口转API [metaso-free-api](https://github.com/LLM-Red-Team/metaso-free-api)
 
-## ✨ 核心特性
+字节跳动（即梦AI）接口转API [jimeng-free-api](https://github.com/LLM-Red-Team/jimeng-free-api)
 
-- ✅ **图文对话支持**：支持发送图片进行多模态对话（新增）
-- ✅ **高速流式输出**：实时响应，流畅体验
-- ✅ **多轮对话**：支持上下文连续对话
-- ✅ **OpenAI 兼容**：完全兼容 OpenAI API 格式
-- ✅ **多账号支持**：支持多个 sessionid 轮询使用
-- ✅ **零配置部署**：开箱即用，无需复杂配置
-- ✅ **自动清理**：自动清理会话痕迹
+讯飞星火（Spark）接口转API [spark-free-api](https://github.com/LLM-Red-Team/spark-free-api)
 
-📖 **[查看详细使用文档](./docs/USAGE_CN.md)** - 包含 Python、Node.js、cURL 等完整示例
+MiniMax（海螺AI）接口转API [hailuo-free-api](https://github.com/LLM-Red-Team/hailuo-free-api)
 
-## 📋 目录
+深度求索（DeepSeek）接口转API [deepseek-free-api](https://github.com/LLM-Red-Team/deepseek-free-api)
+
+聆心智能 (Emohaa) 接口转API [emohaa-free-api](https://github.com/LLM-Red-Team/emohaa-free-api)
+
+## 目录
 
 * [免责声明](#免责声明)
-* [快速开始](#快速开始)
-  * [获取 SessionID](#获取-sessionid)
+* [接入准备](#接入准备)
+  * [智能体接入](#智能体接入)
   * [多账号接入](#多账号接入)
-* [部署方式](#部署方式)
-* [接口使用](#接口使用)
-  * [文本对话](#文本对话)
-  * [图文对话（新增）](#图文对话新增)
-  * [流式输出](#流式输出)
-  * [SessionID 存活检测](#sessionid-存活检测)
-* [测试脚本](#测试脚本)
+* [Docker部署](#Docker部署)
+  * [Docker-compose部署](#Docker-compose部署)
+* [Render部署](#Render部署)
+* [Vercel部署](#Vercel部署)
+* [原生部署](#原生部署)
+* [推荐使用客户端](#推荐使用客户端)
+* [接口列表](#接口列表)
+  * [对话补全](#对话补全)
+  * [sessionid存活检测](#sessionid存活检测)
 * [注意事项](#注意事项)
-  * [Nginx 反代优化](#nginx-反代优化)
-  * [Token 统计](#token-统计)
+  * [Nginx反代优化](#Nginx反代优化)
+  * [Token统计](#Token统计)
+* [Star History](#star-history)
+  
+## 免责声明
 
----
+**逆向API是不稳定的，建议前往火山引擎官方 https://www.volcengine.com/product/doubao 付费使用API，避免封禁的风险。**
 
-## ⚠️ 免责声明
+**本组织和个人不接受任何资金捐助和交易，此项目是纯粹研究交流学习性质！**
 
-**本项目仅供学习研究使用，请勿用于商业用途！**
+**仅限自用，禁止对外提供服务或商用，避免对官方造成服务压力，否则风险自担！**
 
-- 逆向 API 存在不稳定性，建议前往 [火山引擎官方](https://www.volcengine.com/product/doubao) 付费使用正式 API
-- 本项目不接受任何资金捐助和交易
-- **仅限个人学习使用，禁止对外提供服务或商用**
-- 使用本项目产生的任何后果由使用者自行承担
+**仅限自用，禁止对外提供服务或商用，避免对官方造成服务压力，否则风险自担！**
 
----
+**仅限自用，禁止对外提供服务或商用，避免对官方造成服务压力，否则风险自担！**
 
-## 🚀 快速开始
+## 接入准备
 
-### 获取 SessionID
+从 [豆包](https://www.doubao.com/) 获取sessionid
 
-1. 访问 [豆包官网](https://www.doubao.com/) 并登录账号
-2. 按 `F12` 打开浏览器开发者工具
-3. 进入 `Application` > `Cookies` > `https://www.doubao.com`
-4. 找到 `sessionid` 字段，复制其值
+进入豆包登录账号，然后F12打开开发者工具，从Application > Cookies中找到`sessionid`的值，这将作为Authorization的Bearer Token值：`Authorization: Bearer sessionid`
 
-![获取SessionID示例](./doc/example-0.png)
+![example0](./doc/example-0.png)
 
 ### 多账号接入
 
-支持多个账号轮询使用，使用逗号分隔多个 sessionid：
+你可以通过提供多个账号的sessionid并使用`,`拼接提供：
 
-```
-Authorization: Bearer sessionid1,sessionid2,sessionid3
-```
+`Authorization: Bearer sessionid1,sessionid2,sessionid3`
 
-每次请求会自动从中随机选择一个可用的 sessionid。
+每次请求服务会从中挑选一个。
 
----
+## Docker部署
 
-## 📦 部署方式
+请准备一台具有公网IP的服务器并将8000端口开放。
 
-**环境要求**：Node.js 16+
+拉取镜像并启动服务
 
-### 1. 克隆项目
-
-```bash
-git clone https://github.com/1994qrq/2025doubao-free-api.git
-cd 2025doubao-free-api
+```shell
+docker run -it -d --init --name doubao-free-api -p 8000:8000 -e TZ=Asia/Shanghai vinlic/doubao-free-api:latest
 ```
 
-### 2. 安装依赖
+查看服务实时日志
 
-```bash
-npm install
-# 或使用 yarn
-yarn install
+```shell
+docker logs -f doubao-free-api
 ```
 
-### 3. 编译构建
+重启服务
 
-```bash
+```shell
+docker restart doubao-free-api
+```
+
+停止服务
+
+```shell
+docker stop doubao-free-api
+```
+
+### Docker-compose部署
+
+```yaml
+version: '3'
+
+services:
+  doubao-free-api:
+    container_name: doubao-free-api
+    image: vinlic/doubao-free-api:latest
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - TZ=Asia/Shanghai
+```
+
+### Render部署
+
+**注意：部分部署区域可能无法连接豆包，如容器日志出现请求超时或无法连接，请切换其他区域部署！**
+**注意：免费账户的容器实例将在一段时间不活动时自动停止运行，这会导致下次请求时遇到50秒或更长的延迟，建议查看[Render容器保活](https://github.com/LLM-Red-Team/free-api-hub/#Render%E5%AE%B9%E5%99%A8%E4%BF%9D%E6%B4%BB)**
+
+1. fork本项目到你的github账号下。
+
+2. 访问 [Render](https://dashboard.render.com/) 并登录你的github账号。
+
+3. 构建你的 Web Service（New+ -> Build and deploy from a Git repository -> Connect你fork的项目 -> 选择部署区域 -> 选择实例类型为Free -> Create Web Service）。
+
+4. 等待构建完成后，复制分配的域名并拼接URL访问即可。
+
+### Vercel部署
+
+**注意：Vercel免费账户的请求响应超时时间为10秒，但接口响应通常较久，可能会遇到Vercel返回的504超时错误！**
+
+请先确保安装了Node.js环境。
+
+```shell
+npm i -g vercel --registry http://registry.npmmirror.com
+vercel login
+git clone https://github.com/LLM-Red-Team/doubao-free-api
+cd doubao-free-api
+vercel --prod
+```
+
+## 原生部署
+
+请准备一台具有公网IP的服务器并将8000端口开放。
+
+请先安装好Node.js环境并且配置好环境变量，确认node命令可用。
+
+安装依赖
+
+```shell
+npm i
+```
+
+安装PM2进行进程守护
+
+```shell
+npm i -g pm2
+```
+
+编译构建，看到dist目录就是构建完成
+
+```shell
 npm run build
 ```
 
-构建完成后会生成 `dist` 目录。
+启动服务
 
-### 4. 启动服务
-
-**方式一：直接启动**
-
-```bash
-npm start
+```shell
+pm2 start dist/index.js --name "doubao-free-api"
 ```
 
-**方式二：使用 PM2（推荐生产环境）**
+查看服务实时日志
 
-```bash
-# 安装 PM2
-npm install -g pm2
-
-# 启动服务
-pm2 start dist/index.js --name "doubao-free-api"
-
-# 查看日志
+```shell
 pm2 logs doubao-free-api
+```
 
-# 重启服务
+重启服务
+
+```shell
 pm2 reload doubao-free-api
+```
 
-# 停止服务
+停止服务
+
+```shell
 pm2 stop doubao-free-api
 ```
 
-服务默认运行在 `http://localhost:8000`
+## 推荐使用客户端
 
----
+使用以下二次开发客户端接入free-api系列项目更快更简单，支持文档/图像上传！
 
-## 🔌 接口使用
+由 [Clivia](https://github.com/Yanyutin753/lobe-chat) 二次开发的LobeChat [https://github.com/Yanyutin753/lobe-chat](https://github.com/Yanyutin753/lobe-chat)
 
-本项目完全兼容 OpenAI API 格式，可以直接使用 OpenAI SDK 或其他兼容客户端（如 [Dify](https://dify.ai/)）接入。
+由 [时光@](https://github.com/SuYxh) 二次开发的ChatGPT Web [https://github.com/SuYxh/chatgpt-web-sea](https://github.com/SuYxh/chatgpt-web-sea)
 
-### 文本对话
+## 接口列表
 
-**接口地址**：`POST /v1/chat/completions`
+目前支持与openai兼容的 `/v1/chat/completions` 接口，可自行使用与openai或其他兼容的客户端接入接口，或者使用 [dify](https://dify.ai/) 等线上服务接入使用。
 
-**请求头**：
+### 对话补全
 
-```http
-Authorization: Bearer YOUR_SESSION_ID
-Content-Type: application/json
+对话补全接口，与openai的 [chat-completions-api](https://platform.openai.com/docs/guides/text-generation/chat-completions-api) 兼容。
+
+**POST /v1/chat/completions**
+
+header 需要设置 Authorization 头部：
+
+```
+Authorization: Bearer [sessionid]
 ```
 
-**请求示例**：
-
+请求数据：
 ```json
 {
-  "model": "doubao",
-  "messages": [
-    {
-      "role": "user",
-      "content": "你好，请介绍一下你自己"
-    }
-  ],
-  "stream": false
-}
-```
-
-**响应示例**：
-
-```json
-{
-  "id": "397193850645250",
-  "model": "doubao",
-  "object": "chat.completion",
-  "choices": [
-    {
-      "index": 0,
-      "message": {
-        "role": "assistant",
-        "content": "我叫豆包，是字节跳动开发的AI助手，可以帮你解答问题、提供建议等。"
-      },
-      "finish_reason": "stop"
-    }
-  ],
-  "usage": {
-    "prompt_tokens": 1,
-    "completion_tokens": 1,
-    "total_tokens": 2
-  },
-  "created": 1733300587
-}
-```
-
----
-
-### 图文对话（新增）
-
-**✨ 本版本新增功能**：支持发送图片进行多模态对话！
-
-**支持的图片格式**：
-- 图片 URL（http/https）
-- Base64 编码的图片数据
-
-**请求示例 1：使用图片 URL**
-
-```json
-{
-  "model": "doubao",
-  "messages": [
-    {
-      "role": "user",
-      "content": [
+    // 固定使用doubao
+    "model": "doubao",
+    // 目前多轮对话基于消息合并实现，某些场景可能导致能力下降且受单轮最大token数限制
+    // 如果您想获得原生的多轮对话体验，可以传入首轮消息获得的id，来接续上下文
+    // "conversation_id": "397193850580994",
+    "messages": [
         {
-          "type": "text",
-          "text": "这张图片里有什么？"
-        },
-        {
-          "type": "image_url",
-          "image_url": {
-            "url": "https://example.com/image.jpg"
-          }
+            "role": "user",
+            "content": "你叫什么？"
         }
-      ]
-    }
-  ],
-  "stream": false
+    ],
+    // 如果使用SSE流请设置为true，默认false
+    "stream": false
 }
 ```
 
-**请求示例 2：使用 Base64 图片**
-
+响应数据：
 ```json
 {
-  "model": "doubao",
-  "messages": [
-    {
-      "role": "user",
-      "content": [
+    // 如果想获得原生多轮对话体验，此id，你可以传入到下一轮对话的conversation_id来接续上下文
+    "id": "397193850645250",
+    "model": "doubao",
+    "object": "chat.completion",
+    "choices": [
         {
-          "type": "text",
-          "text": "请描述这张图片"
-        },
-        {
-          "type": "image_url",
-          "image_url": {
-            "url": "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
-          }
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": "我叫豆包呀，能陪你聊天、帮你答疑解惑呢。"
+            },
+            "finish_reason": "stop"
         }
-      ]
-    }
-  ]
+    ],
+    "usage": {
+        "prompt_tokens": 1,
+        "completion_tokens": 1,
+        "total_tokens": 2
+    },
+    "created": 1733300587
 }
 ```
 
-**兼容格式**：
+### sessionid存活检测
 
-本项目支持多种图片字段格式，以下格式均可使用：
+检测sessionid是否存活，如果存活live未true，否则为false，请不要频繁（小于10分钟）调用此接口。
 
-```json
-// 格式 1: image_url（OpenAI 标准格式）
-{
-  "type": "image_url",
-  "image_url": {
-    "url": "https://example.com/image.jpg"
-  }
-}
+**POST /token/check**
 
-// 格式 2: image
-{
-  "type": "image",
-  "image_url": "https://example.com/image.jpg"
-}
-
-// 格式 3: file
-{
-  "type": "file",
-  "file_url": {
-    "url": "https://example.com/image.jpg"
-  }
-}
-```
-
----
-
-### 流式输出
-
-设置 `"stream": true` 启用流式响应：
-
+请求数据：
 ```json
 {
-  "model": "doubao",
-  "messages": [
-    {
-      "role": "user",
-      "content": "写一首诗"
-    }
-  ],
-  "stream": true
+    "token": "6750e5af32eb15976..."
 }
 ```
 
-流式响应使用 Server-Sent Events (SSE) 格式。
-
----
-
-### SessionID 存活检测
-
-**接口地址**：`POST /token/check`
-
-**请求示例**：
-
+响应数据：
 ```json
 {
-  "token": "your_session_id_here"
+    "live": true
 }
 ```
 
-**响应示例**：
+## 注意事项
 
-```json
-{
-  "live": true
-}
-```
+### Nginx反代优化
 
-⚠️ **注意**：请勿频繁调用此接口（建议间隔 > 10 分钟）
-
----
-
-## 🧪 测试脚本
-
-项目提供了测试脚本，位于 `scripts/send_image_test.js`。
-
-### 使用方法
-
-```bash
-# 设置环境变量
-export SESSION_ID="your_session_id_here"
-export API_BASE="http://127.0.0.1:8000"
-export IMAGE_URL="https://example.com/your-image.jpg"
-
-# 运行测试
-node scripts/send_image_test.js
-```
-
-### 测试脚本说明
-
-该脚本演示了如何：
-- 发送文本消息
-- 发送图片 URL
-- 处理 API 响应
-
-你可以根据需要修改脚本来测试不同的场景。
-
----
-
-## 📝 注意事项
-
-### Nginx 反代优化
-
-如果使用 Nginx 反向代理，建议添加以下配置以优化流式输出：
+如果您正在使用Nginx反向代理doubao-free-api，请添加以下配置项优化流的输出效果，优化体验感。
 
 ```nginx
-# 关闭代理缓冲
+# 关闭代理缓冲。当设置为off时，Nginx会立即将客户端请求发送到后端服务器，并立即将从后端服务器接收到的响应发送回客户端。
 proxy_buffering off;
-
-# 启用分块传输编码
+# 启用分块传输编码。分块传输编码允许服务器为动态生成的内容分块发送数据，而不需要预先知道内容的大小。
 chunked_transfer_encoding on;
-
-# 优化 TCP 传输
+# 开启TCP_NOPUSH，这告诉Nginx在数据包发送到客户端之前，尽可能地发送数据。这通常在sendfile使用时配合使用，可以提高网络效率。
 tcp_nopush on;
+# 开启TCP_NODELAY，这告诉Nginx不延迟发送数据，立即发送小数据包。在某些情况下，这可以减少网络的延迟。
 tcp_nodelay on;
-
-# 设置连接超时
+# 设置保持连接的超时时间，这里设置为120秒。如果在这段时间内，客户端和服务器之间没有进一步的通信，连接将被关闭。
 keepalive_timeout 120;
 ```
 
-### Token 统计
+### Token统计
 
-由于推理在豆包服务端进行，token 数量无法精确统计，API 返回的 token 数为固定值，仅供参考。
+由于推理侧不在doubao-free-api，因此token不可统计，将以固定数字返回。
 
-### 图片上传限制
+## Star History
 
-- 单个图片最大支持 100MB
-- 支持的图片格式：PNG、JPEG、GIF、WebP
-- 图片会自动上传到豆包的存储服务
-
----
-
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
----
-
-## 📄 License
-
-本项目基于 ISC 协议开源。
-
----
-
-## 🙏 致谢
-
-本项目基于 [LLM-Red-Team/doubao-free-api](https://github.com/LLM-Red-Team/doubao-free-api) 进行修复和增强。
-
----
-
-## ⭐ Star History
-
-如果这个项目对你有帮助，欢迎给个 Star ⭐
-
-[![Star History Chart](https://api.star-history.com/svg?repos=1994qrq/2025doubao-free-api&type=Date)](https://star-history.com/#1994qrq/2025doubao-free-api&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=LLM-Red-Team/doubao-free-api&type=Date)](https://star-history.com/#LLM-Red-Team/doubao-free-api&Date)

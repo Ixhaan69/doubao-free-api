@@ -96,7 +96,7 @@ version: '3'
 services:
   doubao-free-api:
     container_name: doubao-free-api
-    image: vinlic/doubao-free-api:latest
+    image: bitsea19/doubao-free-api:latest
     restart: always
     ports:
       - "8000:8000"

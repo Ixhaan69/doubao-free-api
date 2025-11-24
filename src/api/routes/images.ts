@@ -29,8 +29,8 @@ export default {
             request
                 .validate('body.model', _.isString)
                 .validate('body.prompt', _.isString)
-                .validate('body.ratio', _.isString)
-                .validate('body.style', _.isString)
+                .validate('body.ratio', (v) => _.isUndefined(v) || _.isString(v))
+                .validate('body.style', (v) => _.isUndefined(v) || _.isString(v))
                 .validate('body.stream', _.isBoolean)
                 .validate('headers.authorization', _.isString)
                 .validate('body.image', (v) => _.isUndefined(v) || _.isString(v)); // 参考图为可选字符串
